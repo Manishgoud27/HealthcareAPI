@@ -34,9 +34,15 @@ namespace HealthcareAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>>  GetPatients()
+        public async Task<ActionResult<IEnumerable<Patient>>>  GetPatients(string? name)
         {
-            var patients = await _context.Patients.ToListAsync();
+            var query = _context.Patients.AsQueryable();
+
+            if(!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(p => p.FirstName.Contains(name));
+            }
+            var patients = await query.ToListAsync();
             return Ok(patients);
         }
 
