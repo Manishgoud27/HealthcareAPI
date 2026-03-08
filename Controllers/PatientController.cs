@@ -20,10 +20,17 @@ namespace HealthcareAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Patient>> CreatePatient(Patient patient)
         {
-            _context.Patients.Add(patient);
-            await _context.SaveChangesAsync();
+          try
+            {
+              _context.Patients.Add(patient);
+              await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPatient), new {id= patient.Id}, patient);
+              return CreatedAtAction(nameof(GetPatient), new { id = patient.Id }, patient);
+            }
+            catch (Exception ex)
+            {
+             return StatusCode(500, ex.ToString());
+            }
         }
 
         [HttpGet]
