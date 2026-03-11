@@ -34,24 +34,9 @@ namespace HealthcareAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>>  GetPatients(string? name, int page=1, int pageSize = 5)
+        public async Task<ActionResult<IEnumerable<Patient>>>  GetPatients()
         {
-            var query = _context.Patients.AsQueryable();
-
-            if(!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(p => p.FirstName.Contains(name));
-            }
-
-            if(pageSize != 5 && pageSize != 10 && pageSize != 15)
-            {
-                pageSize = 5;
-            }
-
-            var patients = await query
-            .Skip((page -1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+            var patients = await _context.Patients.ToListAsync();
             return Ok(patients);
         }
 

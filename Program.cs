@@ -3,6 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy("AllowReact",
+    policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,6 +33,7 @@ app.UseSwaggerUI();
 
 app.UseAuthorization();
 
+app.UseCors("AllowReact");
 app.MapControllers();
 
 app.Run();
