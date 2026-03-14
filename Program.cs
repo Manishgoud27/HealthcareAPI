@@ -3,17 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options => 
-{
-    options.AddPolicy("AllowReact",
-    policy =>
-    {
-        policy.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-    });
-});
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -24,6 +13,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -31,9 +32,10 @@ app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 
+app.UserCors("AllowFrontend");
+
 app.UseAuthorization();
 
-app.UseCors("AllowReact");
 app.MapControllers();
 
 app.Run();
