@@ -32,7 +32,7 @@ app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 
-app.UserCors("AllowFrontend");
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
